@@ -1,15 +1,26 @@
-from fastapi import FastAPI, HTTPException
-from FastAPI.routers.items import router as items_router
-from database.database import client  
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+from FastAPI.routers import items, users
+import logging
 
 app = FastAPI()
 
-@app.get("/check_db")
-async def check_db_connection():
-    try:
-        await client.server_info()
-        return {"status": "Connection to MongoDB is successful"}
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+# Enable CORS
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
-app.include_router(items_router, prefix="/items", tags=["items"])
+# Configuración de logging
+logging.basicConfig(level=logging.INFO)
+
+@app.exception_handler(Exception)
+async def validation_exception_handler(request, exc):
+    logging.error(f"Error: {exc}")
+    return JSONResponse(status_code=500, content={"detail": str(exc)})
+
+app.include_router(items.router, prefix="/items", tags=["items"])
+app.include_router(users.router, prefix="/users", tags=["users"])

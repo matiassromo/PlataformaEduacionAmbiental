@@ -8,3 +8,5 @@ class Question(BaseModel):
 class Challenge(BaseModel):
     title: str
     description: Optional[str] = None
+
+
