@@ -1,4 +1,9 @@
 from pydantic import BaseModel
+from typing import List
+
+class Answer(BaseModel):
+    user_id: str
+    answer: str
 
 class ItemBase(BaseModel):
     id: int
@@ -6,13 +11,13 @@ class ItemBase(BaseModel):
     description: str
 
 class ItemCreate(ItemBase):
-    id: int
+    pass
 
 class ItemUpdate(ItemBase):
     pass
 
 class ItemInDB(ItemBase):
-    id: int
+    answers: List[Answer] = []
 
 class Item(ItemInDB):
     pass

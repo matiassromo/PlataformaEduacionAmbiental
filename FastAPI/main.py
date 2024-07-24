@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from FastAPI.routers import items, users
+from fastapi.responses import JSONResponse
+from FastAPI.routers import items, users, metrics
 import logging
 
 app = FastAPI()
@@ -24,3 +25,4 @@ async def validation_exception_handler(request, exc):
 
 app.include_router(items.router, prefix="/items", tags=["items"])
 app.include_router(users.router, prefix="/users", tags=["users"])
+app.include_router(metrics.router, prefix="/metrics", tags=["metrics"])
