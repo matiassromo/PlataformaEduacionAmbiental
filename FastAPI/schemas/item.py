@@ -1,18 +1,18 @@
-# schemas/item.py
 from pydantic import BaseModel
 
 class ItemBase(BaseModel):
-    name: str
+    id: int
+    question_number: int
     description: str
 
 class ItemCreate(ItemBase):
-    pass
+    id: int
 
 class ItemUpdate(ItemBase):
     pass
 
 class ItemInDB(ItemBase):
-    id: str
+    id: int
 
 class Item(ItemInDB):
     pass

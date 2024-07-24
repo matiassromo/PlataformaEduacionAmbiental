@@ -1,6 +1,6 @@
 from fastapi import FastAPI, HTTPException
-from FastAPI.routers import items, challenges  # Ruta completa desde la raíz del proyecto
-from database.database import client  # Ruta correcta para el módulo de la base de datos
+from FastAPI.routers.items import router as items_router
+from database.database import client  
 
 app = FastAPI()
 
@@ -12,5 +12,4 @@ async def check_db_connection():
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-app.include_router(items.router)
-app.include_router(challenges.router)
+app.include_router(items_router, prefix="/items", tags=["items"])
