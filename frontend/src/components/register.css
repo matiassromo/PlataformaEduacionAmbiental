@@ -1,0 +1,87 @@
+body, html {
+  height: 100%;
+  margin: 0;
+  font-family: Arial, sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.register-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+}
+
+.register-box {
+  background: rgba(255, 255, 255, 0.2);
+  padding: 40px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(10px);
+  text-align: center;
+  position: relative;
+  width: 300px;
+}
+
+.icon {
+  font-size: 50px;
+  margin-bottom: 20px;
+  background: #3a3a3a;
+  color: white;
+  padding: 15px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.register-box h2 {
+  margin-bottom: 30px;
+  color: white;
+  font-size: 24px;
+}
+
+.input-container {
+  display: flex;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 10px;
+  border-radius: 5px;
+  margin-bottom: 15px;
+}
+
+.input-container .icon {
+  margin-right: 10px;
+  color: white;
+}
+
+input {
+  background: none;
+  border: none;
+  outline: none;
+  color: white;
+  width: 100%;
+}
+
+.register-button {
+  background: #5cb85c;
+  color: white;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background 0.3s;
+}
+
+.register-button:hover {
+  background: #4cae4c;
+}
+
+@media (max-width: 600px) {
+  .register-box {
+      width: 90%;
+  }
+}

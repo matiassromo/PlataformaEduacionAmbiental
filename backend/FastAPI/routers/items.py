@@ -1,6 +1,6 @@
 from fastapi import APIRouter, HTTPException, Depends
 from fastapi.encoders import jsonable_encoder
-from backend.database.database import item_collection, item_helper, metric_collection, metric_helper
+from backend.database.database import item_collection, item_helper, metric_collection, metric_helper, generate_new_id
 from backend.FastAPI.schemas.item import ItemCreate, ItemUpdate, Item, Answer
 from bson import ObjectId
 from typing import List
@@ -10,12 +10,10 @@ router = APIRouter()
 
 @router.post("/", response_model=Item)
 async def create_item(item: ItemCreate, current_user: User = Depends(get_current_user)):
-    # Verificar que el id no se repita
     existing_item = await item_collection.find_one({"id": item.id})
     if existing_item:
         raise HTTPException(status_code=400, detail="ID already exists")
     
-    # Verificar que id y question_number coincidan
     if item.id != item.question_number:
         raise HTTPException(status_code=400, detail="ID and question number must match")
     
@@ -27,7 +25,7 @@ async def create_item(item: ItemCreate, current_user: User = Depends(get_current
 @router.get("/", response_model=List[Item])
 async def get_items(current_user: User = Depends(get_current_user)):
     items = []
-    async for item in item_collection.find().sort("id", 1):  # Ordenar por id en orden ascendente
+    async for item in item_collection.find().sort("id", 1):
         items.append(item_helper(item))
     return items
 
@@ -40,7 +38,6 @@ async def get_item(item_id: int, current_user: User = Depends(get_current_user))
 
 @router.put("/{item_id}", response_model=Item)
 async def update_item(item_id: int, item: ItemUpdate, current_user: User = Depends(get_current_user)):
-    # Asegurar que el id y el question_number coincidan en la actualización
     if item.question_number and item_id != item.question_number:
         raise HTTPException(status_code=400, detail="ID and question number must match")
     
@@ -68,6 +65,9 @@ async def answer_question(item_id: int, answer: Answer, current_user: User = Dep
     if not item:
         raise HTTPException(status_code=404, detail="Item not found")
 
+    # Agrega la respuesta al item
+    if 'answers' not in item:
+        item['answers'] = []
     item['answers'].append(jsonable_encoder(answer))
     await item_collection.update_one({"id": item_id}, {"$set": {"answers": item['answers']}})
 
@@ -77,8 +77,9 @@ async def answer_question(item_id: int, answer: Answer, current_user: User = Dep
         new_value = existing_metric["value"] + 1
         await metric_collection.update_one({"question_id": item_id, "name": "responses"}, {"$set": {"value": new_value}})
     else:
+        new_metric_id = await generate_new_id("metrics_id")
         new_metric = {
-            "id": generate_new_id(),  # Asegúrate de tener una función para generar nuevos IDs
+            "id": new_metric_id,
             "question_id": item_id,
             "name": "responses",
             "value": 1
@@ -86,3 +87,30 @@ async def answer_question(item_id: int, answer: Answer, current_user: User = Dep
         await metric_collection.insert_one(new_metric)
     
     return item_helper(item)
+
+@router.put("/{item_id}/answer/{answer_id}", response_model=Item)
+async def edit_answer(item_id: int, answer_id: int, new_answer: Answer, current_user: User = Depends(get_current_user)):
+    item = await item_collection.find_one({"id": item_id})
+    if not item:
+        raise HTTPException(status_code=404, detail="Item not found")
+
+    for i, answer in enumerate(item['answers']):
+        if answer['id'] == answer_id:
+            item['answers'][i] = jsonable_encoder(new_answer)
+            break
+    else:
+        raise HTTPException(status_code=404, detail="Answer not found")
+    
+    await item_collection.update_one({"id": item_id}, {"$set": {"answers": item['answers']}})
+    return item_helper(item)
+
+@router.delete("/{item_id}/answer/{answer_id}", response_model=Item)
+async def delete_answer(item_id: int, answer_id: int, current_user: User = Depends(get_current_user)):
+    item = await item_collection.find_one({"id": item_id})
+    if not item:
+        raise HTTPException(status_code=404, detail="Item not found")
+
+    item['answers'] = [answer for answer in item['answers'] if answer['id'] != answer_id]
+    await item_collection.update_one({"id": item_id}, {"$set": {"answers": item['answers']}})
+    return item_helper(item)
+
