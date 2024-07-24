@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
-from FastAPI.routers import items, users, metrics
+from backend.FastAPI.routers import items, users, metrics
 import logging
 
 app = FastAPI()

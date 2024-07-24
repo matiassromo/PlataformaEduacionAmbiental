@@ -1,10 +1,10 @@
 from fastapi import APIRouter, HTTPException, Depends
 from fastapi.encoders import jsonable_encoder
-from database.database import item_collection, item_helper, metric_collection, metric_helper
-from FastAPI.schemas.item import ItemCreate, ItemUpdate, Item, Answer
+from backend.database.database import item_collection, item_helper, metric_collection, metric_helper
+from backend.FastAPI.schemas.item import ItemCreate, ItemUpdate, Item, Answer
 from bson import ObjectId
 from typing import List
-from FastAPI.routers.users import get_current_user, User
+from backend.FastAPI.routers.users import get_current_user, User
 
 router = APIRouter()
 

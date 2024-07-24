@@ -1,7 +1,7 @@
 from fastapi import APIRouter, HTTPException, Depends
 from pydantic import BaseModel, EmailStr
 from passlib.context import CryptContext
-from database.database import user_collection, user_helper
+from backend.database.database import user_collection, user_helper
 from bson import ObjectId
 from typing import Optional, List
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
