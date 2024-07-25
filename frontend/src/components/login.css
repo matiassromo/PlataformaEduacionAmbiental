@@ -17,7 +17,7 @@ body, html {
 }
 
 .login-box {
-    background: rgba(255, 255, 255, 0.2);
+    background: rgba(0, 0, 0, 0.525);
     padding: 40px;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
@@ -30,7 +30,7 @@ body, html {
 .icon {
     font-size: 50px;
     margin-bottom: 20px;
-    background: #3a3a3a;
+    background: #000000;
     color: white;
     padding: 15px;
     border-radius: 50%;
@@ -39,7 +39,7 @@ body, html {
 
 .login-box h2 {
     margin-bottom: 30px;
-    color: white;
+    color: rgb(255, 255, 255);
     font-size: 24px;
 }
 
@@ -48,8 +48,8 @@ body, html {
     align-items: center;
     background: rgba(255, 255, 255, 0.1);
     padding: 10px;
-    border-radius: 5px;
-    margin-bottom: 15px;
+    border-radius: 10px;
+    margin-bottom: 20px;
 }
 
 .input-container .icon {
@@ -66,8 +66,8 @@ input {
 }
 
 .login-button {
-    background: #667eea;
-    color: white;
+    background: #66ea66;
+    color: rgb(0, 0, 0);
     padding: 10px;
     border: none;
     border-radius: 5px;
@@ -88,7 +88,7 @@ input {
 }
 
 .options a {
-    color: #667eea;
+    color: #fff200d4;
     text-decoration: none;
 }
 
@@ -98,6 +98,6 @@ input {
 
 @media (max-width: 600px) {
     .login-box {
-        width: 90%;
+        width: 0%;
     }
 }

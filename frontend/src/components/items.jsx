@@ -69,6 +69,7 @@ const Items = () => {
 
     return (
         <div className="items-container">
+            <h1 className="title-all">Plataforma de educacion ambiental</h1>
             <h2>Preguntas</h2>
             {error && <p className="error">{error}</p>}
             {items.map(item => (
@@ -98,3 +99,5 @@ const Items = () => {
 };
 
 export default Items;
+
+

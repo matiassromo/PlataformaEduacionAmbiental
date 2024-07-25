@@ -47,7 +47,7 @@ const Login = () => {
                         <FaUser className="icon" />
                         <input
                             type="email"
-                            placeholder="Email"
+                            placeholder="Correo"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                         />
@@ -56,12 +56,12 @@ const Login = () => {
                         <FaLock className="icon" />
                         <input
                             type="password"
-                            placeholder="Password"
+                            placeholder="Contraseña"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                         />
                     </div>
-                    <button type="submit" className="login-button">Login</button>
+                    <button type="submit" className="login-button">Iniciar sesión</button>
                     {error && <p className="error">{error}</p>}
                 </form>
                 <div className="options">
@@ -73,3 +73,5 @@ const Login = () => {
 };
 
 export default Login;
+
+

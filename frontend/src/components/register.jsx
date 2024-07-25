@@ -52,7 +52,7 @@ const Register = () => {
                         <FaUser className="icon" />
                         <input
                             type="email"
-                            placeholder="Email"
+                            placeholder="Correo"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                         />
