@@ -1,8 +1,9 @@
+import logging
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
-from backend.FastAPI.routers import items, users, metrics
-import logging
+from backend.FastAPI.routers import items, users, answers
+from backend.database.database import update_existing_answers
 
 app = FastAPI()
 
@@ -23,7 +24,10 @@ async def validation_exception_handler(request, exc):
     logging.error(f"Error: {exc}")
     return JSONResponse(status_code=500, content={"detail": str(exc)})
 
+@app.on_event("startup")
+async def startup_event():
+    await update_existing_answers()
 
 app.include_router(items.router, prefix="/items", tags=["items"])
 app.include_router(users.router, prefix="/users", tags=["users"])
-app.include_router(metrics.router, prefix="/metrics", tags=["metrics"])
+app.include_router(answers.router, prefix="/answers", tags=["answers"])

@@ -8,7 +8,6 @@ database = client.educacion_ambiental
 
 item_collection = database.get_collection("items")
 user_collection = database.get_collection("users")
-metric_collection = database.get_collection("metrics")
 counter_collection = database.get_collection("counters")
 
 async def get_next_sequence_value(sequence_name: str):
@@ -35,15 +34,6 @@ def user_helper(user) -> dict:
         "hashed_password": user["hashed_password"],
     }
 
-def metric_helper(metric) -> dict:
-    return {
-        "id": metric["id"],
-        "question_id": metric["question_id"],
-        "responses": metric.get("responses", 0),
-        "responses_edited": metric.get("responses_edited", 0),
-        "responses_deleted": metric.get("responses_deleted", 0),
-    }
-
 async def generate_new_id(sequence_name: str):
     result = await counter_collection.find_one_and_update(
         {"_id": sequence_name},
@@ -52,3 +42,12 @@ async def generate_new_id(sequence_name: str):
         return_document=True
     )
     return result["sequence_value"]
+
+async def update_existing_answers():
+    async for item in item_collection.find():
+        if "answers" not in item:
+            item["answers"] = []
+        for answer in item.get("answers", []):
+            if "_id" not in answer:
+                answer["_id"] = await generate_new_id("answer_id")
+        await item_collection.update_one({"_id": item["_id"]}, {"$set": {"answers": item["answers"]}})

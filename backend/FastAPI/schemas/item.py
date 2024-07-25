@@ -2,7 +2,7 @@ from pydantic import BaseModel
 from typing import List
 
 class Answer(BaseModel):
-    user_id: str
+    _id: int
     answer: str
 
 class ItemBase(BaseModel):

@@ -90,6 +90,13 @@ async def get_current_user(token: str = Depends(oauth2_scheme)):
         raise credentials_exception
     return user
 
+@router.get("/", response_model=List[User])
+async def get_users():
+    users = []
+    async for user in user_collection.find():
+        users.append(user_helper(user))
+    return users
+
 @router.post("/register", response_model=User)
 async def register_user(user: UserCreate):
     existing_user = await user_collection.find_one({"email": user.email})
@@ -116,13 +123,6 @@ async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(
         data={"sub": user["email"]}, expires_delta=access_token_expires
     )
     return {"access_token": access_token, "token_type": "bearer"}
-
-@router.get("/", response_model=List[User])
-async def get_users():
-    users = []
-    async for user in user_collection.find():
-        users.append(user_helper(user))
-    return users
 
 @router.put("/{user_id}", response_model=User)
 async def update_user(user_id: str, user: UserUpdate):
